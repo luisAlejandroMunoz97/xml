@@ -1,0 +1,15 @@
+{
+    "novelas": [
+        {
+            "id": 1,
+            "titulo": "Novela Ejemplo",
+            "contenido": "Este es el contenido de la novela ejemplo.",
+            "capitulos": [
+                {
+                    "titulo": "Capítulo 1",
+                    "contenido": "Contenido del capítulo 1."
+                }
+            ]
+        }
+    ]
+}

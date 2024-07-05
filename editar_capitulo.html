@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Capítulo</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Editar Capítulo</h1>
+    </header>
+    <main>
+        <form id="capitulo-form">
+            <input type="text" id="titulo-capitulo" value="" placeholder="Título del capítulo" required>
+            <textarea id="contenido-capitulo" placeholder="Contenido del capítulo" required></textarea>
+            <button type="submit">Guardar Cambios</button>
+        </form>
+    </main>
+    <script src="scripts.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const capituloEditando = JSON.parse(localStorage.getItem('capituloEditando'));
+            if (capituloEditando) {
+                document.getElementById('titulo-capitulo').value = capituloEditando.titulo;
+                document.getElementById('contenido-capitulo').value = capituloEditando.contenido;
+            } else {
+                // Manejar el caso donde no se encuentra el capítulo editando
+                console.error('No se encontró información del capítulo para editar.');
+                // Redirigir de vuelta a la página principal u otra página de manejo de errores
+                window.location.href = 'index.html';
+            }
+
+            document.getElementById('capitulo-form').addEventListener('submit', function(event) {
+                event.preventDefault();
+                // Obtener los valores modificados del formulario
+                const nuevoTitulo = document.getElementById('titulo-capitulo').value;
+                const nuevoContenido = document.getElementById('contenido-capitulo').value;
+
+                // Actualizar los datos del capítulo en localStorage
+                const novelas = obtenerNovelas();
+                const novelaIndex = novelas.findIndex(novela => novela.id == capituloEditando.novelaId);
+                if (novelaIndex !== -1) {
+                    const capituloIndex = capituloEditando.capituloIndex;
+                    novelas[novelaIndex].capitulos[capituloIndex].titulo = nuevoTitulo;
+                    novelas[novelaIndex].capitulos[capituloIndex].contenido = nuevoContenido;
+                    guardarNovelas(novelas);
+                }
+
+                // Limpiar la información del capítulo editando en localStorage
+                localStorage.removeItem('capituloEditando');
+
+                // Redirigir de vuelta a la página de detalles de la novela
+                window.location.href = `novela.html?id=${capituloEditando.novelaId}`;
+            });
+        });
+    </script>
+</body>
+</html>

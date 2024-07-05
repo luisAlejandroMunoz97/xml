@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Nueva Novela</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Nueva Novela</h1>
+    </header>
+    <main>
+        <form id="novela-form">
+            <input type="text" id="titulo" placeholder="Título de la novela" required>
+            <textarea id="contenido" placeholder="Escribe tu novela aquí..." required></textarea>
+            <button type="button" onclick="guardarNovela()">Guardar Novela</button>
+        </form>
+    </main>
+    <script src="scripts.js"></script>
+    <script>
+        function guardarNovela() {
+            const titulo = document.getElementById('titulo').value;
+            const contenido = document.getElementById('contenido').value;
+
+            const nuevaNovela = {
+                id: Date.now(),
+                titulo: titulo,
+                contenido: contenido,
+                capitulos: []
+            };
+
+            let novelas = obtenerNovelas();
+            novelas.push(nuevaNovela);
+            guardarNovelas(novelas);
+
+            // Redirigir a la página principal después de guardar la nueva novela
+            window.location.href = 'index.html';
+        }
+
+        function obtenerNovelas() {
+            return JSON.parse(localStorage.getItem('novelas')) || [];
+        }
+
+        function guardarNovelas(novelas) {
+            localStorage.setItem('novelas', JSON.stringify(novelas));
+        }
+    </script>
+</body>
+</html>

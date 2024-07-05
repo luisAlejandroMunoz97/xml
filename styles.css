@@ -1,0 +1,113 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    margin: 5px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+main {
+    padding: 1rem;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    background: #f4f4f4;
+    margin: .5rem 0;
+    padding: .5rem;
+    border: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+li a {
+    text-decoration: none;
+    color: #4CAF50;
+}
+
+li a:hover {
+    text-decoration: underline;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+textarea {
+    height: 200px;
+}
+
+#capitulos {
+    margin-top: 20px;
+}
+
+.capitulo {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 4px;
+}
+
+.capitulo h2 {
+    margin-top: 0;
+}
+
+/* Estilos para la lectura de novelas */
+#contenido-lectura {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+#contenido-lectura h2 {
+    text-align: center;
+}
+
+#contenido-lectura p {
+    text-align: justify;
+    line-height: 1.6;
+    margin: 20px 0;
+}
+
+#contenido-lectura button {
+    margin: 10px;
+}
+
+#lista-capitulos {
+    margin-top: 20px;
+}
+
+#lista-capitulos li {
+    margin: 5px 0;
+}

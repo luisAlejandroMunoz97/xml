@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles de Novela</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1 id="novela-title">Detalles de la Novela</h1>
+    </header>
+    <main>
+        <div id="capitulos">
+            <!-- Aquí se generarán dinámicamente los capítulos -->
+        </div>
+        <button onclick="window.location.href = 'index.html'">Volver al inicio</button>
+        <form id="nuevo-capitulo-form">
+            <h2>Agregar Capítulo</h2>
+            <input type="text" id="titulo-capitulo" placeholder="Título del capítulo" required>
+            <textarea id="contenido-capitulo" placeholder="Contenido del capítulo" required></textarea>
+            <button type="submit">Agregar Capítulo</button>
+        </form>
+    </main>
+    <script src="scripts.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const novelaId = urlParams.get('id');
+            
+            if (novelaId) {
+                cargarNovela(novelaId);
+            } else {
+                console.error('No se encontró el ID de la novela.');
+            }
+
+            document.getElementById('nuevo-capitulo-form').addEventListener('submit', function(event) {
+                event.preventDefault();
+                agregarCapitulo(novelaId);
+            });
+        });
+
+        function cargarNovela(id) {
+            const novelas = obtenerNovelas();
+            const novela = novelas.find(novela => novela.id == id);
+
+            if (novela) {
+                document.getElementById('novela-title').innerText = novela.titulo;
+
+                const capitulosDiv = document.getElementById('capitulos');
+                capitulosDiv.innerHTML = '';
+                
+                novela.capitulos.forEach((capitulo, index) => {
+                    const capituloDiv = document.createElement('div');
+                    capituloDiv.className = 'capitulo';
+                    capituloDiv.innerHTML = `
+                        <h2>${capitulo.titulo}</h2>
+                        <p>${capitulo.contenido}</p>
+                        <div>
+                            <button onclick="editarCapitulo(${novela.id}, ${index})">Editar Capítulo</button>
+                            <button onclick="eliminarCapitulo(${novela.id}, ${index})">Eliminar Capítulo</button>
+                        </div>`;
+                    capitulosDiv.appendChild(capituloDiv);
+                });
+            } else {
+                console.error('No se encontró la novela con ID:', id);
+            }
+        }
+
+        function editarCapitulo(novelaId, capituloIndex) {
+            const novelas = obtenerNovelas();
+            const novela = novelas.find(novela => novela.id == novelaId);
+
+            if (novela && novela.capitulos[capituloIndex]) {
+                const capitulo = novela.capitulos[capituloIndex];
+                // Guardar la información del capítulo en localStorage para la edición
+                localStorage.setItem('capituloEditando', JSON.stringify({
+                    novelaId: novelaId,
+                    capituloIndex: capituloIndex,
+                    titulo: capitulo.titulo,
+                    contenido: capitulo.contenido
+                }));
+                // Redirigir a la página de edición de capítulo
+                window.location.href = 'editar_capitulo.html';
+            }
+        }
+
+        function eliminarCapitulo(novelaId, capituloIndex) {
+            const confirmacion = confirm('¿Seguro que quieres eliminar este capítulo?');
+            if (confirmacion) {
+                const novelas = obtenerNovelas();
+                const novela = novelas.find(novela => novela.id == novelaId);
+
+                if (novela && novela.capitulos[capituloIndex]) {
+                    novela.capitulos.splice(capituloIndex, 1); // Elimina el capítulo del arreglo
+                    guardarNovelas(novelas); // Guarda los cambios en el almacenamiento local
+                    cargarNovela(novelaId); // Recarga la novela para actualizar la interfaz
+                }
+            }
+        }
+
+        function agregarCapitulo(novelaId) {
+            const tituloCapitulo = document.getElementById('titulo-capitulo').value;
+            const contenidoCapitulo = document.getElementById('contenido-capitulo').value;
+            let novelas = obtenerNovelas();
+            const novela = novelas.find(novela => novela.id == novelaId);
+
+            if (novela) {
+                novela.capitulos.push({
+                    titulo: tituloCapitulo,
+                    contenido: contenidoCapitulo
+                });
+                guardarNovelas(novelas);
+                cargarNovela(novelaId);  // Recargar la novela para mostrar el nuevo capítulo
+                document.getElementById('nuevo-capitulo-form').reset(); // Limpiar el formulario después de agregar el capítulo
+            }
+        }
+
+        function obtenerNovelas() {
+            return JSON.parse(localStorage.getItem('novelas')) || [];
+        }
+    </script>
+</body>
+</html>
